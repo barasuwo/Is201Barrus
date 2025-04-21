@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width-device-width, initial-scale=1.0">
+    <title>Disney Princess Guessing Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #b0e0e6;
+            font-family: 'Press Start 2P', cursive;
+            text-align: center;
+            transition: background-color 0.5s ease;
+        }
+
+        .game-container {
+            width: 95%;
+            max-width: 800px;
+            padding: 1.5rem;
+            background-color: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+            transition: background-color 0.5s ease, box-shadow 0.5s ease;
+            margin: 1rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #ff69b4;
+            transition: color 0.5s ease;
+        }
+
+        @media (min-width: 640px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        #question-prompt {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            color: #4a5568;
+            transition: color 0.5s ease;
+        }
+
+        @media (min-width: 640px) {
+            #question-prompt {
+                font-size: 1.2rem;
+            }
+        }
+
+        #answer-options {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .answer-option {
+            padding: 0.75rem 1.5rem;
+            background-color: #ff69b4;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.5s ease;
+            margin: 0.5rem 0;
+            width: 100%;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        .answer-option:hover {
+            background-color: #ff1493;
+        }
+
+        .answer-option:active {
+            transform: translateY(2px);
+            box-shadow: none;
+        }
+
+        #answer-input {
+            padding: 0.75rem;
+            width: 100%;
+            max-width: 300px;
+            border: 2px solid #ff69b4;
+            border-radius: 0.5rem;
+            margin: 0 auto 1rem auto;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.8rem;
+            transition: border-color 0.5s ease, box-shadow 0.5s ease;
+            display: none;
+        }
+
+        #answer-input:focus {
+            outline: none;
+            border-color: #ffdab9;
+            box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.1);
+        }
+
+        #submit-answer {
+            padding: 0.75rem 1.5rem;
+            background-color: #ff69b4;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.9rem;
+            transition: background-color 0.5s ease, transform 0.1s ease, box-shadow 0.5s ease;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        #submit-answer:hover {
+            background-color: #ff1493;
+        }
+
+        #submit-answer:active {
+            transform: translateY(2px);
+            box-shadow: none;
+        }
+
+        #result {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            min-height: 2rem;
+            transition: color 0.5s ease;
+        }
+
+        .correct {
+            color: #32cd32;
+        }
+
+        .incorrect {
+            color: #dc143c;
+        }
+
+        #princess-image {
+            max-width: 100%;
+            max-height: 300px;
+            margin: 0 auto 1rem auto;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+            display: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #play-again {
+            padding: 0.75rem 1.5rem;
+            background-color: #00bfff;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.9rem;
+            transition: background-color 0.5s ease, transform 0.1s ease, box-shadow 0.5s ease;
+            margin-top: 1rem;
+        }
+
+        #play-again:hover {
+            background-color: #008b8b;
+        }
+
+        #play-again:active {
+            transform: translateY(2px);
+            box-shadow: none;
+        }
+
+        #score-display {
+            font-size: 1.2rem;
+            color: #4a5568;
+            margin-bottom: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            #score-display {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #202020;
+            }
+
+            .game-container {
+                background-color: #333;
+                box-shadow: 0 0.5rem 1rem rgba(255, 255, 255, 0.1);
+            }
+
+            h1 {
+                color: #ffb6c1;
+            }
+
+            #question-prompt {
+                color: #d3d3d3;
+            }
+
+            #answer-input {
+                border-color: #ffb6c1;
+                background-color: #444;
+                color: #fff;
+                display: none;
+            }
+
+            #answer-input:focus {
+                border-color: #ffdab9;
+                box-shadow: 0 0 0 3px rgba(255, 182, 193, 0.1);
+            }
+
+            #submit-answer {
+                background-color: #ffb6c1;
+            }
+
+            .answer-option {
+                background-color: #ffb6c1;
+            }
+
+            .answer-option:hover {
+                background-color: #ff69b4;
+            }
+
+            #result {
+                color: #fff;
+            }
+
+            #score-display {
+                color: #fff;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Guess the Disney Princess</h1>
+        <p id="question-prompt"></p>
+        <div id="answer-options" class="hidden">
+            <button class="answer-option"></button>
+            <button class="answer-option"></button>
+            <button class="answer-option"></button>
+            <button class="answer-option"></button>
+        </div>
+        <input type="text" id="answer-input" placeholder="Enter your guess" class="hidden">
+        <button id="submit-answer" class="hidden">Submit Answer</button>
+        <div id="result" class="hidden"></div>
+        <img id="princess-image" src="" alt="Princess" class="hidden">
+        <button id="play-again" class="hidden">Play Again</button>
+        <div id="score-display">Score: <span id="score">0</span></div>
+    </div>
+
+    <script>
+        const questionPrompt = document.getElementById('question-prompt');
+        const answerOptions = document.getElementById('answer-options');
+        const answerOptionElements = document.querySelectorAll('.answer-option');
+        const answerInput = document.getElementById('answer-input');
+        const submitAnswerButton = document.getElementById('submit-answer');
+        const result = document.getElementById('result');
+        const princessImage = document.getElementById('princess-image');
+        const playAgainButton = document.getElementById('play-again');
+        const gameContainer = document.querySelector('.game-container');
+        const scoreDisplay = document.getElementById('score');
+
+        const princesses = [
+            {
+                name: "Snow White",
+                description: "She is the fairest of them all and has lips red as the rose.",
+                imageUrl: "snow_white.jpg"
+            },
+            {
+                name: "Cinderella",
+                description: "She has a fairy godmother and a glass slipper.",
+                imageUrl: "cinderella.jpg"
+            },
+            {
+                name: "Aurora",
+                description: "She was cursed by Maleficent and pricked her finger on a spindle.",
+                imageUrl: "aurora.jpg"
+            },
+            {
+                name: "Ariel",
+                description: "She is a mermaid who dreams of being part of the human world.",
+                imageUrl: "ariel.jpg"
+            },
+            {
+                name: "Belle",
+                description: "She falls in love with a cursed beast in an enchanted castle.",
+                imageUrl: "belle.jpg"
+            },
+            {
+                name: "Jasmine",
+                description: "She has a pet tiger and flies on a magic carpet.",
+                imageUrl: "jasmine.jpg"
+            },
+            {
+                name: "Pocahontas",
+                description: "She is the daughter of a Native American chief and befriends an English settler.",
+                imageUrl: "pocahontas.jpg"
+            },
+            {
+                name: "Mulan",
+                description: "She disguises herself as a man to save her father.",
+                imageUrl: "mulan.jpg"
+            },
+            {
+                name: "Tiana",
+                description: "She dreams of owning her own restaurant and kisses a frog.",
+                imageUrl: "tiana.jpg"
+            },
+            {
+                name: "Rapunzel",
+                description: "She has long, magical hair and is trapped in a tower.",
+                imageUrl: "rapunzel.jpg"
+            },
+            {
+                name: "Merida",
+                description: "She is a Scottish princess who is skilled in archery.",
+                imageUrl: "merida.jpg"
+            },
+            {
+                name: "Moana",
+                description: "She is the daughter of a Polynesian chief and sails across the ocean.",
+                imageUrl: "moana.jpg"
+            }
+        ];
+
+        let currentPrincessIndex;
+        let gameRunning = false;
+        let score = 0;
+        let level = 1;
+        let questionsPerLevel = 3;
+        let currentQuestion = 0;
+        const maxQuestions = 10;
+        let askedQuestions = [];
+
+        function startGame() {
+            gameRunning = true;
+            result.className = 'hidden';
+            princessImage.className = 'hidden';
+            answerInput.className = 'hidden';
+            submitAnswerButton.className = 'hidden';
+            playAgainButton.className = 'hidden';
+            answerOptions.className = '';
+            score = 0;
+            level = 1;
+            currentQuestion = 0;
+            askedQuestions = [];
+            scoreDisplay.textContent = `Score: ${score}`;
+            askQuestion();
+        }
+
+        function askQuestion() {
+            if (currentQuestion > maxQuestions) {
+                endGame();
+                return;
+            }
+            currentQuestion++;
+            let chosenPrincessIndex;
+            do {
+                chosenPrincessIndex = Math.floor(Math.random() * princesses.length);
+            } while (askedQuestions.includes(chosenPrincessIndex));
+            currentPrincessIndex = chosenPrincessIndex;
+            askedQuestions.push(currentPrincessIndex);
+
+            const currentPrincess = princesses[currentPrincessIndex];
+            let description = currentPrincess.description;
+             if (level === 2) {
+                description = description.split(' ').slice(0, -2).join(' ') + "...";
+            } else if (level === 3) {
+                description = description.split(' ').slice(0, -4).join(' ') + "...";
+            }
+            questionPrompt.textContent = `Level ${level}, Question ${currentQuestion}: Who is this Disney princess? ${description}`;
+            answerInput.value = '';
+            answerInput.focus();
+
+            const correctAnswer = princesses[currentPrincessIndex].name.toLowerCase();
+            const choices = [correctAnswer];
+            while (choices.length < 4) {
+                const randomPrincessIndex = Math.floor(Math.random() * princesses.length);
+                const randomPrincessName = princesses[randomPrincessIndex].name.toLowerCase();
+                if (!choices.includes(randomPrincessName) && !choices.includes(princesses[randomPrincessIndex].name.toLowerCase())) {
+                    choices.push(randomPrincessName);
+                }
+            }
+
+            shuffleArray(choices);
+
+            answerOptionElements.forEach((option, i) => {
+                if (i < choices.length) {
+                    option.textContent = choices[i];
+                    option.onclick = () => {
+                        checkAnswer(choices[i]);
+                    };
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+        }
+
+        function checkAnswer(selectedAnswer) {
+            if (!gameRunning) {
+                return;
+            }
+            const correctAnswer = princesses[currentPrincessIndex].name.toLowerCase();
+
+            result.className = '';
+            if (selectedAnswer === correctAnswer) {
+                result.textContent = "Correct! Well Done!";
+                result.classList.add('correct');
+                score++;
+                scoreDisplay.textContent = `Score: ${score}`;
+            } else {
+                result.textContent = `Incorrect! The answer was ${princesses[currentPrincessIndex].name}.`;
+                result.classList.add('incorrect');
+            }
+
+            princessImage.src = princesses[currentPrincessIndex].imageUrl;
+            princessImage.className = '';
+            gameRunning = false;
+            setTimeout(askQuestion, 2000);
+            if (currentQuestion >= maxQuestions)
+            {
+                setTimeout(endGame, 2000);
+            }
+            else{
+                 setTimeout(() => {
+                    princessImage.className = 'hidden';
+                    result.className = 'hidden';
+                    gameRunning = true;
+                }, 2000);
+            }
+
+
+            answerOptions.className = 'hidden';
+            answerInput.className = 'hidden';
+            submitAnswerButton.className = 'hidden';
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function endGame() {
+            gameRunning = false;
+            result.textContent = `Game Over! Your final score is ${score}/${maxQuestions}.  Unfortunately, we cannot provide the answer key.`;
+            result.className = '';
+            playAgainButton.className = '';
+            answerOptions.className = 'hidden';
+            princessImage.className = 'hidden';
+            currentQuestion = 0;
+            level = 1;
+        }
+
+        playAgainButton.addEventListener('click', startGame);
+
+        startGame();
+    </script>
+</body>
+</html>
